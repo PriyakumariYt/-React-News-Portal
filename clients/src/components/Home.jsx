@@ -1,25 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import axios from 'axios'; 
+
 import NewsCard from './NewsCard';
 import NewsCardDetails from './NewsCardDetails';
 const Home = () => {
   const [data, setData] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+
   const getApiData = async () => {
     try {
-      const res = await axios.get("https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=3e817333f4514eb58cf74c8ae045c64d");
-      setData(res.data.articles);
-      setFilteredData(res.data.articles); 
+      const response = await fetch("https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=3e817333f4514eb58cf74c8ae045c64d");
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setData(data.articles);
+      setFilteredData(data.articles);
     } catch (error) {
-      console.log("error", error);
+      console.log("Error fetching data:", error);
     }
   };
+
   useEffect(() => {
     getApiData();
   }, []);
-
   const handleSearch = () => {
     if (searchInput.trim() === '') {
       setFilteredData(data);
@@ -39,10 +44,7 @@ return (
               <li>
                 <Link to="/">Home</Link>
               </li>
-            
-        
-
-            </ul>
+           </ul>
             <div className='search-container'>
               <input
                 type="text"
