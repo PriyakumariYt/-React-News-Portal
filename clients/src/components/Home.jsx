@@ -7,10 +7,11 @@ const Home = () => {
   const [data, setData] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+ let apikey = import.meta.env.VITE_NEWS_API_KEY
 
   const getApiData = async () => {
     try {
-      const response = await fetch("https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=3e817333f4514eb58cf74c8ae045c64d");
+    const response = await fetch(`https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=${apikey}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
